@@ -7,6 +7,7 @@ module PrivateValues
       config_file = "#{ENV['HOME']}/private-values.rc"
       @config = File.exist?(config_file) ? YAML.load_file(config_file) : {}
       @config['values-dir'] ||= '~/.private-values'
+      @config['values-dir']   = File.expand_path @config['values-dir']
       @config['password']   ||= nil
       case ARGV[0]
       when 'new'  then cmd_new
