@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require_relative 'lib/private_values'
+require_relative '../lib/private_values'
 
 PrivateValues::CLI.new

@@ -37,9 +37,10 @@ private-values
 
 Commands
 --
-new PROJECT\t
-set PROJECT.KEY VALUE\t
-get PROJECT.KEY\t
+new PROJECT\tCreate a new private values.
+set PROJECT.KEY VALUE\tSet a private value.
+get PROJECT.KEY\tGet the private value.
+path PROJECT\tPath to the private files.
 
 ~/private-values.rc
 --
