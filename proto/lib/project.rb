@@ -3,10 +3,16 @@ require 'yaml'
 
 module PrivateValues
   class Project
-    def initialize name, config
+    class << self
+      def config values_dir: nil, password: nil
+        @@values_dir = File.expand_path(values_dir || '~/.private-values')
+        @@password   = password
+      end
+    end
+
+    def initialize name
       throw 'The project name shold only contain [-A-Za-z0-9_]' if name !~ /\A[-A-Za-z0-9_]+\z/
-      @name   = name
-      @config = config
+      @name = name
     end
 
     def create
@@ -30,7 +36,7 @@ module PrivateValues
     end
 
     def path
-      "#{@config['values-dir']}/#{@name}"
+      "#{@@values_dir}/#{@name}"
     end
 
     private

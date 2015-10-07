@@ -7,9 +7,7 @@ module PrivateValues
     def initialize
       config_file = "#{ENV['HOME']}/private-values.rc"
       @config = File.exist?(config_file) ? YAML.load_file(config_file) : {}
-      @config['values-dir'] ||= '~/.private-values'
-      @config['values-dir']   = File.expand_path @config['values-dir']
-      @config['password']   ||= nil
+      Project.config values_dir: @config['values-dir'], password: @config['password']
       case ARGV[0]
       when 'new'  then cmd_new
       when 'set'  then cmd_set
@@ -25,33 +23,33 @@ module PrivateValues
     def cmd_new
       # open('/tmp/private-values.log', 'w'){}
       project = ARGV[1]
-      Project.new(project, @config).create
+      Project.new(project).create
     end
 
     def cmd_rm
       # open('/tmp/private-values.log', 'w'){}
       project = ARGV[1]
-      Project.new(project, @config).destroy
+      Project.new(project).destroy
     end
 
     def cmd_set
       # open('/tmp/private-values.log', 'w'){}
       project, key = ARGV[1].split '.', 2
       value = ARGV[2]
-      Project.new(project, @config)[key] = value
+      Project.new(project)[key] = value
     end
 
     def cmd_get
       # open('/tmp/private-values.log', 'w'){}
       project, key = ARGV[1].split '.', 2
-      $stdout.puts Project.new(project, @config)[key]
+      $stdout.puts Project.new(project)[key]
 
     end
 
     def cmd_path
       # open('/tmp/private-values.log', 'w'){}
       project = ARGV[1]
-      $stdout.puts Project.new(project, @config).path
+      $stdout.puts Project.new(project).path
     end
 
     def cmd_else
