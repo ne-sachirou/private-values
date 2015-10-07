@@ -13,6 +13,7 @@ module PrivateValues
       case ARGV[0]
       when 'new'  then cmd_new
       when 'set'  then cmd_set
+      when 'rm'   then cmd_rm
       when 'get'  then cmd_get
       when 'path' then cmd_path
       else             cmd_else
@@ -25,8 +26,14 @@ module PrivateValues
       # open('/tmp/private-values.log', 'w'){}
       project = ARGV[1]
       validate_project_name project
-      FileUtils.mkdir_p "#{@config['values-dir']}/#{project}"
+      FileUtils.mkdir_p project_dir_name project
       File.new(values_file_name(project), 'w'){|f| f.write({}.to_yaml) }
+    end
+
+    def cmd_rm
+      # open('/tmp/private-values.log', 'w'){}
+      project = ARGV[1]
+      FileUtils.rm_rf project_dir_name(project), secure: true
     end
 
     def cmd_set
@@ -50,7 +57,7 @@ module PrivateValues
     def cmd_path
       # open('/tmp/private-values.log', 'w'){}
       project = ARGV[1]
-      $stdout.puts "#{@config['values-dir']}/#{project}"
+      $stdout.puts project_dir_name project
     end
 
     def cmd_else
@@ -60,6 +67,7 @@ private-values
 Commands
 --
 new PROJECT\tCreate a new private values.
+rm PROJECT\tRemove a private values.
 set PROJECT.KEY VALUE\tSet a private value.
 get PROJECT.KEY\tGet the private value.
 path PROJECT\tPath to the private files.
@@ -74,8 +82,12 @@ HELP
       throw 'The project name shold only contain [-A-Za-z0-9_.]' if project !~ /\A[-A-Za-z0-9_.]+\z/
     end
 
+    def project_dir_name project
+      "#{@config['values-dir']}/#{project}"
+    end
+
     def values_file_name project
-      "#{@config['values-dir']}/#{project}/values.yml"
+      "#{project_dir_name project}/values.yml"
     end
 
     def unify_str_value str
