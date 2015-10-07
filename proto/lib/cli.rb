@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'optparse'
 require 'yaml'
 
@@ -21,6 +22,10 @@ module PrivateValues
     private
 
     def cmd_new
+      project = ARGV[1]
+      throw 'The project name shold only contain [-A-Za-z0-9_.]' if project !~ /\A[-A-Za-z0-9_.]+\z/
+      FileUtils.mkdir_p "#{@config['values-dir']}/#{project}"
+      File.new "#{@config['values-dir']}/#{project}/values.yml", 'w'
     end
 
     def cmd_set
