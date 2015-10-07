@@ -11,8 +11,5 @@ Feature: New command
 
   Scenario: Create an irregular name project
     Given using "private-values.default.rc" for a rc file
-    And run NEW command with an option "some/project"
-    Then it should fail with "The project name shold only contain [-A-Za-z0-9_.]"
-
-  # Scenario: Create an existing project
-
+    And run NEW command with an option "some.project"
+    Then it should fail with "The project name shold only contain [-A-Za-z0-9_]"
