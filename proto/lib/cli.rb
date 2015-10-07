@@ -30,7 +30,7 @@ module PrivateValues
 
     def cmd_set
       open('/tmp/private-values.log', 'w'){}
-      project, key = ARGV[1].split '.'
+      project, key = ARGV[1].split '.', 2
       value = ARGV[2]
       validate_project_name project
       value = unify_str_value value
