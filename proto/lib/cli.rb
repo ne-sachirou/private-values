@@ -22,6 +22,7 @@ module PrivateValues
     private
 
     def cmd_new
+      # open('/tmp/private-values.log', 'w'){}
       project = ARGV[1]
       validate_project_name project
       FileUtils.mkdir_p "#{@config['values-dir']}/#{project}"
@@ -29,7 +30,7 @@ module PrivateValues
     end
 
     def cmd_set
-      open('/tmp/private-values.log', 'w'){}
+      # open('/tmp/private-values.log', 'w'){}
       project, key = ARGV[1].split '.', 2
       value = ARGV[2]
       validate_project_name project
@@ -40,9 +41,16 @@ module PrivateValues
     end
 
     def cmd_get
+      # open('/tmp/private-values.log', 'w'){}
+      project, key = ARGV[1].split '.', 2
+      values = YAML.load_file(values_file_name project) || {}
+      $stdout.puts values[key]
     end
 
     def cmd_path
+      # open('/tmp/private-values.log', 'w'){}
+      project = ARGV[1]
+      $stdout.puts "#{@config['values-dir']}/#{project}"
     end
 
     def cmd_else
