@@ -14,5 +14,5 @@ Feature: New command
     And run NEW command with an option "some/project"
     Then it should fail with "The project name shold only contain [-A-Za-z0-9_.]"
 
-  Scenario: Create an existing project
+  # Scenario: Create an existing project
 

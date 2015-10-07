@@ -23,12 +23,20 @@ module PrivateValues
 
     def cmd_new
       project = ARGV[1]
-      throw 'The project name shold only contain [-A-Za-z0-9_.]' if project !~ /\A[-A-Za-z0-9_.]+\z/
+      validate_project_name project
       FileUtils.mkdir_p "#{@config['values-dir']}/#{project}"
-      File.new "#{@config['values-dir']}/#{project}/values.yml", 'w'
+      File.new(values_file_name(project), 'w'){|f| f.write({}.to_yaml) }
     end
 
     def cmd_set
+      open('/tmp/private-values.log', 'w'){}
+      project, key = ARGV[1].split '.'
+      value = ARGV[2]
+      validate_project_name project
+      value = unify_str_value value
+      values = YAML.load_file(values_file_name project) || {}
+      values[key] = value
+      File.open(values_file_name(project), 'w:utf-8'){|f| f.write values.to_yaml }
     end
 
     def cmd_get
@@ -52,6 +60,20 @@ path PROJECT\tPath to the private files.
 --
 
 HELP
+    end
+
+    def validate_project_name project
+      throw 'The project name shold only contain [-A-Za-z0-9_.]' if project !~ /\A[-A-Za-z0-9_.]+\z/
+    end
+
+    def values_file_name project
+      "#{@config['values-dir']}/#{project}/values.yml"
+    end
+
+    def unify_str_value str
+      return Integer(str) rescue nil
+      return Float(str) rescue nil
+      str
     end
   end
 end

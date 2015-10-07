@@ -17,3 +17,12 @@ end
 Given /^run NEW command with an option "([^"]*)"$/ do |project|
   step %{I run `private-values new #{project}`}
 end
+
+Given /^a project named "([^"]*)"$/ do |project|
+  step %{using "private-values.default.rc" for a rc file}
+  step %{run NEW command with an option "#{project}"}
+end
+
+Given /^run SET command with options "([^"]*)" and "([^"]*)"$/ do |arg1, value|
+  step %{I run `private-values set #{arg1} #{value}`}
+end
