@@ -20,6 +20,14 @@ Given /^run SET command with options "([^"]*)" and "([^"]*)"$/ do |arg1, value|
   step %{I run `private-values set #{arg1} #{value}`}
 end
 
+Given /^run GET command with an option "([^"]*)"$/ do |arg1|
+  step %{I run `private-values get #{arg1}`}
+end
+
+Given /^run PATH command with an option "([^"]*)"$/ do |project|
+  step %{I run `private-values path #{project}`}
+end
+
 Given /^using "([^"]*)" for a rc file$/ do |rc_file|
   FileUtils.cp "#{__dir__}/../../fixtures/#{rc_file}",
                "#{__dir__}/../tmp/private-values.rc",
