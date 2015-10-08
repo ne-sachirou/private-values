@@ -15,6 +15,14 @@ module PrivateValues
       @name = name
     end
 
+    def path
+      "#{@@values_dir}/#{@name}"
+    end
+
+    def exist?
+      Dir.exist? path
+    end
+
     def create
       FileUtils.mkdir_p path
       File.open(values_file_name, 'w'){|f| f.write({}.to_yaml) }
@@ -33,10 +41,6 @@ module PrivateValues
       values = YAML.load_file(values_file_name) || {}
       values[key] = value
       File.open(values_file_name, 'w:utf-8'){|f| f.write values.to_yaml }
-    end
-
-    def path
-      "#{@@values_dir}/#{@name}"
     end
 
     private

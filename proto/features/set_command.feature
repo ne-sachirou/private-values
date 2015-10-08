@@ -28,3 +28,11 @@ Feature: Set command
       """
       white space2: value
       """
+
+  Scenario: Set a value, but the project isn't exist
+    Given run SET command with options "someProject.key" and "value"
+    Then it should fail with:
+      """
+      The project "someProject" isn't exist.
+      Run `private-values new someProject`.
+      """

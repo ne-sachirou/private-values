@@ -22,34 +22,40 @@ module PrivateValues
 
     def cmd_new
       # open('/tmp/private-values.log', 'w'){}
-      project = ARGV[1]
-      Project.new(project).create
+      project_name = ARGV[1]
+      Project.new(project_name).create
     end
 
     def cmd_rm
       # open('/tmp/private-values.log', 'w'){}
-      project = ARGV[1]
-      Project.new(project).destroy
+      project_name = ARGV[1]
+      Project.new(project_name).destroy
     end
 
     def cmd_set
       # open('/tmp/private-values.log', 'w'){}
-      project, key = ARGV[1].split '.', 2
+      project_name, key = ARGV[1].split '.', 2
       value = ARGV[2]
-      Project.new(project)[key] = value
+      project = Project.new project_name
+      the_project_must_exist project
+      project[key] = value
     end
 
     def cmd_get
       # open('/tmp/private-values.log', 'w'){}
-      project, key = ARGV[1].split '.', 2
-      $stdout.puts Project.new(project)[key]
+      project_name, key = ARGV[1].split '.', 2
+      project = Project.new project_name
+      the_project_must_exist project
+      $stdout.puts project[key]
 
     end
 
     def cmd_path
       # open('/tmp/private-values.log', 'w'){}
-      project = ARGV[1]
-      $stdout.puts Project.new(project).path
+      project_name = ARGV[1]
+      project = Project.new project_name
+      the_project_must_exist project
+      $stdout.puts project.path
     end
 
     def cmd_else
@@ -69,6 +75,13 @@ path PROJECT         \tPath to the private files.
 values-dir: ~/.private-values
 password: PASSWORD
 HELP
+    end
+
+    def the_project_must_exist project
+      unless project.exist?
+        throw 'The project "someProject" isn\'t exist.
+Run `private-values new someProject`.'
+      end
     end
   end
 end

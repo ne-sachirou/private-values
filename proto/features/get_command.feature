@@ -10,3 +10,11 @@ Feature: Get command
     Given run SET command with options "someProject.float1" and "42.0"
     And run GET command with an option "someProject.float1"
     Then the output should contain exactly "42.0"
+
+  Scenario: Get a value, but the project isn't exist
+    Given run GET command with an option "someProject.key"
+    Then it should fail with:
+      """
+      The project "someProject" isn't exist.
+      Run `private-values new someProject`.
+      """
