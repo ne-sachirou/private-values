@@ -43,5 +43,4 @@ cmdHelp =
             \ ~/private-values.rc\n\
             \ --\n\
             \ values-dir: ~/.private-values\n\
-            \ password: PASSWORD\n\
             \ "
