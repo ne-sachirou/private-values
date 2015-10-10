@@ -25,7 +25,7 @@ module PrivateValues
 
     def create
       FileUtils.mkdir_p path
-      File.open(values_file_name, 'w'){|f| f.write({}.to_yaml) }
+      save_values({})
     end
 
     def destroy
@@ -33,20 +33,25 @@ module PrivateValues
     end
 
     def [] key
-      (YAML.load_file(values_file_name) || {})[key]
+      load_values[key]
     end
 
     def []= key, value
-      value = unify_str_value value
-      values = YAML.load_file(values_file_name) || {}
-      values[key] = value
-      File.open(values_file_name, 'w:utf-8'){|f| f.write values.to_yaml }
+      values = load_values
+      values[key] = unify_str_value value
+      save_values values
     end
 
     private
 
-    def values_file_name
-      "#{path}/values.yml"
+    def load_values
+      data = File.read "#{path}/values.yml", mode: 'rb'
+      YAML.load(data) || {}
+    end
+
+    def save_values values
+      data = values.to_yaml
+      File.open("#{path}/values.yml", 'wb'){|f| f.write data }
     end
 
     def unify_str_value str
