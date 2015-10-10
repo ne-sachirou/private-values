@@ -1,5 +1,22 @@
 private-values
 ==
+```
+private-values [COMMAND]
+
+COMMAND
+--
+new PROJECT          \tCreate new private values.
+rm PROJECT           \tRemove private values.
+set PROJECT.KEY VALUE\tSet a private value.
+get PROJECT.KEY      \tGet the private value.
+path PROJECT         \tPath to the private files.
+
+~/private-values.rc
+--
+values-dir: ~/.private-values
+password: PASSWORD
+```
+
 Usage
 --
 ```yaml
