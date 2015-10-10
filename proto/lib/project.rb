@@ -4,9 +4,8 @@ require 'yaml'
 module PrivateValues
   class Project
     class << self
-      def config values_dir: nil, password: nil
+      def config values_dir: nil
         @@values_dir = File.expand_path(values_dir || '~/.private-values')
-        @@password   = password
       end
     end
 

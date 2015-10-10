@@ -7,7 +7,7 @@ module PrivateValues
     def initialize
       config_file = "#{ENV['HOME']}/private-values.rc"
       @config = File.exist?(config_file) ? YAML.load_file(config_file) : {}
-      Project.config values_dir: @config['values-dir'], password: @config['password']
+      Project.config values_dir: @config['values-dir']
       case ARGV[0]
       when 'new'  then cmd_new
       when 'set'  then cmd_set
@@ -67,7 +67,6 @@ path PROJECT         \tPath to the private files.
 
 ~/private-values.rc
 --
-values-dir: ~/.private-values
 password: PASSWORD
 HELP
     end
