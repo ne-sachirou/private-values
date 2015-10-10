@@ -9,5 +9,5 @@ Feature: Path command
     Then it should fail with:
       """
       The project "someProject" isn't exist.
-      Run `private-values new someProject`.`
+      Run `private-values new someProject`.
       """

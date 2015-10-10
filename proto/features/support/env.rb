@@ -1,3 +1,5 @@
 require 'aruba/cucumber'
 
-ENV['HOME'] = File.expand_path "#{__dir__}/../tmp"
+Aruba.configure do |config|
+  config.home_directory = "#{__dir__}/../tmp"
+end

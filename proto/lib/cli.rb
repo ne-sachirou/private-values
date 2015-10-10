@@ -21,19 +21,16 @@ module PrivateValues
     private
 
     def cmd_new
-      # open('/tmp/private-values.log', 'w'){}
       project_name = ARGV[1]
       Project.new(project_name).create
     end
 
     def cmd_rm
-      # open('/tmp/private-values.log', 'w'){}
       project_name = ARGV[1]
       Project.new(project_name).destroy
     end
 
     def cmd_set
-      # open('/tmp/private-values.log', 'w'){}
       project_name, key = ARGV[1].split '.', 2
       value = ARGV[2]
       project = Project.new project_name
@@ -42,7 +39,6 @@ module PrivateValues
     end
 
     def cmd_get
-      # open('/tmp/private-values.log', 'w'){}
       project_name, key = ARGV[1].split '.', 2
       project = Project.new project_name
       the_project_must_exist project
@@ -51,7 +47,6 @@ module PrivateValues
     end
 
     def cmd_path
-      # open('/tmp/private-values.log', 'w'){}
       project_name = ARGV[1]
       project = Project.new project_name
       the_project_must_exist project
