@@ -55,9 +55,9 @@ module PrivateValues
 
     def cmd_else
       puts <<HELP
-private-values
+private-values [COMMAND]
 
-Commands
+COMMAND
 --
 new PROJECT          \tCreate new private values.
 rm PROJECT           \tRemove private values.
