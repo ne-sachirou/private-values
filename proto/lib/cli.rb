@@ -54,21 +54,7 @@ module PrivateValues
     end
 
     def cmd_else
-      puts <<HELP
-private-values [COMMAND]
-
-COMMAND
---
-new PROJECT          \tCreate new private values.
-rm PROJECT           \tRemove private values.
-set PROJECT.KEY VALUE\tSet a private value.
-get PROJECT.KEY      \tGet the private value.
-path PROJECT         \tPath to the private files.
-
-~/private-values.rc
---
-password: PASSWORD
-HELP
+      puts File.read "#{__dir__}/../../src/Help.txt", mode: 'r:utf-8'
     end
 
     def the_project_must_exist project

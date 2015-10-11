@@ -1,3 +1,4 @@
+{-# LANGUAGE QuasiQuotes #-}
 module Lib
     ( cmdNew,
       cmdRm,
@@ -6,6 +7,8 @@ module Lib
       cmdPath,
       cmdHelp
     ) where
+
+import Literal ( literalFile )
 
 cmdNew :: [String] -> IO ()
 cmdNew args =
@@ -29,18 +32,4 @@ cmdPath args =
 
 cmdHelp :: IO ()
 cmdHelp =
-  putStrLn "\
-            \ private-values [COMMAND]\n\
-            \ \n\
-            \ COMMAND\n\
-            \ --\n\
-            \ new PROJECT          \tCreate new private values.\n\
-            \ rm PROJECT           \tRemove private values.\n\
-            \ set PROJECT.KEY VALUE\tSet a private value.\n\
-            \ get PROJECT.KEY      \tGet the private value.\n\
-            \ path PROJECT         \tPath to the private files.\n\
-            \ \n\
-            \ ~/private-values.rc\n\
-            \ --\n\
-            \ values-dir: ~/.private-values\n\
-            \ "
+  putStrLn [literalFile|src/Help.txt|]
