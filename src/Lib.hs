@@ -25,8 +25,10 @@ cmdNew args = let projectName:_ = args
     hClose valuesFile
 
 cmdRm :: [String] -> IO ()
-cmdRm args =
-  putStrLn "RM"
+cmdRm args = let projectName:_ = args
+  in do
+    homePath <- getEnv "HOME"
+    removeDirectoryRecursive $ homePath ++ "/.private-values/" ++ projectName
 
 cmdSet :: [String] -> IO ()
 cmdSet args =
