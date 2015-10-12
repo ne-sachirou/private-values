@@ -1,22 +1,28 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Lib
-    ( cmdNew,
-      cmdRm,
-      cmdSet,
-      cmdGet,
-      cmdPath,
-      cmdHelp
+    ( cmdNew
+    , cmdRm
+    , cmdSet
+    , cmdGet
+    , cmdPath
+    , cmdHelp
     ) where
 
 import Literal ( literalFile )
+import System.Directory
+import System.Environment ( getEnv )
+import System.IO
 import Text.Regex.TDFA
 
 cmdNew :: [String] -> IO ()
 cmdNew args = let projectName:_ = args
   in do
-    case validateProjectName projectName of
-      Right projectName -> putStrLn projectName
-      Left error        -> fail error
+    validateProjectName projectName
+    homePath <- getEnv "HOME"
+    createDirectoryIfMissing True $ homePath ++ "/.private-values"
+    createDirectory $ homePath ++ "/.private-values/" ++ projectName
+    valuesFile <- openFile (homePath ++ "/.private-values/" ++ projectName ++ "/values.yml") WriteMode
+    hClose valuesFile
 
 cmdRm :: [String] -> IO ()
 cmdRm args =
@@ -37,7 +43,7 @@ cmdPath args =
 cmdHelp :: IO ()
 cmdHelp = putStrLn [literalFile|src/Help.txt|]
 
-validateProjectName :: String -> Either String String
+validateProjectName :: String -> IO ()
 validateProjectName projectName
-  | (projectName =~ "^[-A-Za-z0-9_]+$" :: Int) == 0 = Left "The project name shold only contain [-A-Za-z0-9_]"
-  | otherwise                                       = Right projectName
+  | (projectName =~ "^[-A-Za-z0-9_]+$" :: Int) == 0 = fail "The project name shold only contain [-A-Za-z0-9_]"
+  | otherwise                                       = return ()
