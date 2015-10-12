@@ -8,6 +8,7 @@ module Lib
     , cmdHelp
     ) where
 
+import Data.List.Split ( splitOn )
 import Literal ( literalFile )
 import Project
 
@@ -25,12 +26,18 @@ cmdRm args = let projectName:_ = args
     destroy project
 
 cmdSet :: [String] -> IO ()
-cmdSet args =
-  putStrLn "SET"
+cmdSet args = let projectName:key:_ = splitOn "." $ head args
+                  value             = head $ tail args
+  in do
+    putStrLn projectName
+    putStrLn key
+    putStrLn value
 
 cmdGet :: [String] -> IO ()
-cmdGet args =
-  putStrLn "GET"
+cmdGet args = let projectName:key:_ = splitOn "." $ head args
+  in do
+    putStrLn projectName
+    putStrLn key
 
 cmdPath :: [String] -> IO ()
 cmdPath args = let projectName:_ = args

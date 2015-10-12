@@ -19,6 +19,7 @@ library
   build-depends:       base >= 4.7 && < 5
                      , directory >= 1.2
                      , regex-tdfa >= 1.2
+                     , split >= 0.2
                      , template-haskell >= 2.10
   default-language:    Haskell2010
 
@@ -29,6 +30,7 @@ executable private-values
   build-depends:       base
                      , regex-tdfa
                      , template-haskell
+                     , split
                      , private-values
   default-language:    Haskell2010
 
