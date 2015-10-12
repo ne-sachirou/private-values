@@ -20,29 +20,70 @@ values-dir: ~/.private-values
 
 Usage
 --
+### Global Setting
+Put the config file at `~/private-values.rc`:
+
 ```yaml
 # ~/private-values.rc
-values-dir: ~/.dotfiles/private-values
+values-dir: ~/.private-values
+```
+
+Make `~/.private-values` as your private Git repo.
+
+### Store Private Values of Your Project
+Let `some-project` is your Git project.
+
+Create a new private-values project and then set private values.
+
+```sh
+private-values new someProject
+private-values set someProject.someValue1 value1
+private-values set someProject.someValue2 value2
+```
+
+Set the values to local environment variables using [direnv][1].
+Write `some-project/.envrc`:
+
+```sh
+# some-project/.envrc
+export SOME_VALUE1=$(private-values get someProject.someValue1)
+export SOME_VALUE2=$(private-values get someProject.someValue2)
 ```
 
 ```sh
-mkdir someProject && cd someProject
-git init
+direnv allow
+```
 
-private-values new someProject
-private-values set someProject.someValue value
-echo ".envrc" > .gitignore
+And ignore the envrc.
 
+```sh
+# some-project/.gitignore or ~/.gitignore
+.envrc
+```
+
+Your private values are stored at `~/.private-values/someProject/values.yml`.
+
+### Store Private Files of Your Project
+For example I make `hello.sh`.
+
+```sh
 echo "," > .gitignore
 ln -s $(private-values path someProject) ,
 echo "#!/bin/bash\necho HELLO" > ,/hello.sh
 chmod +x ,/hello.sh
+,/hello.sh
+```
+
+[direnv][1] helps us.
+
+```sh
+# some-project/.envrc
+export PATH=$PATH:$(private-values path someProject)
 ```
 
 ```sh
-# someProject/.envrc
-export SOME_VALUE=$(private-values get someProject.someValue)
-export PATH=$PATH:$(private-values path someProject)
+direnv allow
+hello.sh
 ```
 
 CONTRIBUTEING
@@ -67,3 +108,6 @@ Proto is placed at proto/. It's written in Ruby.
 TODO
 --
 - Remove proto/.
+- Short command name.
+
+[1]: http://direnv.net/
