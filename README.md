@@ -86,7 +86,7 @@ direnv allow
 hello.sh
 ```
 
-CONTRIBUTEING
+CONTRIBUTING
 --
 ### Pre Requirements
 - Haskell (GHC) & stack
