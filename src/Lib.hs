@@ -39,8 +39,10 @@ cmdGet args =
   putStrLn "GET"
 
 cmdPath :: [String] -> IO ()
-cmdPath args =
-  putStrLn "PATH"
+cmdPath args = let projectName:_ = args
+  in do
+    homePath <- getEnv "HOME"
+    putStrLn $ homePath ++ "/.private-values/" ++ projectName
 
 cmdHelp :: IO ()
 cmdHelp = putStrLn [literalFile|src/Help.txt|]
