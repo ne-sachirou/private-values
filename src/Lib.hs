@@ -29,15 +29,17 @@ cmdSet :: [String] -> IO ()
 cmdSet args = let projectName:key:_ = splitOn "." $ head args
                   value             = head $ tail args
   in do
-    putStrLn projectName
-    putStrLn key
-    putStrLn value
+    project <- initProject projectName
+    shouldExist project
+    setValue project key value
 
 cmdGet :: [String] -> IO ()
 cmdGet args = let projectName:key:_ = splitOn "." $ head args
   in do
-    putStrLn projectName
-    putStrLn key
+    project <- initProject projectName
+    shouldExist project
+    value <- getValue project key
+    putStr value
 
 cmdPath :: [String] -> IO ()
 cmdPath args = let projectName:_ = args

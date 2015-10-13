@@ -1,5 +1,9 @@
 module Project where
 
+import Data.ByteString
+import Data.Map
+import Data.String
+import Data.Yaml.YamlLight
 import System.Directory
 import System.Environment ( getEnv )
 import System.IO
@@ -40,3 +44,20 @@ create project = let Project valuesDir name = project
 destroy :: Project -> IO ()
 destroy project = do
   removeDirectoryRecursive $ path project
+
+setValue :: Read v => Project -> String -> v -> IO ()
+setValue project key value = return ()
+
+getValue :: Project -> String -> IO String
+getValue project key = do
+  values <- parseYamlFile (path project ++ "/values.yml")
+  return $ getValueFromYamlLight key values
+  where
+    getValueFromYamlLight :: String -> YamlLight -> String
+    getValueFromYamlLight key values = let yKey = YStr (fromString key :: ByteString)
+      in case do
+        map <- unMap values
+        yStr <- Data.Map.lookup yKey map
+        unStr yStr
+        of Nothing    -> ""
+           Just value -> show value
