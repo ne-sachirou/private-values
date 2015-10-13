@@ -1,7 +1,6 @@
 module Project where
 
 import Data.ByteString
-import Data.Map
 import Data.String
 import Data.Yaml.YamlLight
 import System.Directory
@@ -56,8 +55,7 @@ getValue project key = do
     getValueFromYamlLight :: String -> YamlLight -> String
     getValueFromYamlLight key values = let yKey = YStr (fromString key :: ByteString)
       in case do
-        map <- unMap values
-        yStr <- Data.Map.lookup yKey map
+        yStr <- lookupYL yKey values
         unStr yStr
         of Nothing    -> ""
            Just value -> show value
