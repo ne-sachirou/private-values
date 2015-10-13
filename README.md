@@ -56,7 +56,7 @@ direnv allow
 
 And ignore the envrc.
 
-```sh
+```
 # some-project/.gitignore or ~/.gitignore
 .envrc
 ```
@@ -86,6 +86,16 @@ direnv allow
 hello.sh
 ```
 
+What is NOT private-values?
+--
+- private-values dose NOT manage secrets in your organization. [valut](https://vaultproject.io) may help you.
+- private-values dose NOT encrypt your secrets. Use Bcrypt or other crypt methods.
+- private-values dose NOT store your secrets on a safe cloud server. I use private Git repo, or encrypted 7zip archive in a cloud storage for this purpose.
+
+What IS private-values?
+--
+- private-values aggregate your private values and files under 1 directory.
+
 CONTRIBUTING
 --
 ### Pre Requirements
@@ -111,3 +121,4 @@ TODO
 - Short command name.
 
 [1]: http://direnv.net/
+<!-- vim:set ft=markdown: -->
