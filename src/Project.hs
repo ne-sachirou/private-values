@@ -1,15 +1,13 @@
 module Project where
 
-import Data.ByteString
-import Data.Map.Lazy as Map
-import Data.Maybe
-import Data.String ( fromString )
-import Data.Yaml
-import Data.Yaml.YamlLight
+import Data.Map.Lazy       ( insert )
+import Data.Yaml           ( encodeFile )
+import Data.Yaml.YamlLight ( parseYamlFile )
 import System.Directory
-import System.Environment ( getEnv )
+import System.Environment  ( getEnv )
 import System.IO
 import Text.Regex.TDFA
+import YamlUtil
 
 data Project = Project { valuesDir :: String, name :: String }
 
@@ -54,28 +52,8 @@ setValue project key value =
   in do
     yValues <- parseYamlFile valuesPath
     encodeFile valuesPath $ insert key value $ toMapFromYL yValues
-  where
-    toStringFromByteString :: ByteString -> String
-    toStringFromByteString byteStr = read $ show byteStr :: String
-    toStringFromYL :: YamlLight -> String
-    toStringFromYL value = fromMaybe "" $ fmap toStringFromByteString $ unStr value
-    toMapFromYL :: YamlLight -> Map String String
-    toMapFromYL yValues =
-      case unMap yValues of
-        Nothing     -> fromList []
-        Just values -> mapKeys toStringFromYL $ Map.map toStringFromYL values
 
 getValue :: Project -> String -> IO String
 getValue project key =
   do values <- parseYamlFile $ path project ++ "/values.yml"
      return $ getValueFromYL key values
-  where
-    toStringFromByteString :: ByteString -> String
-    toStringFromByteString byteStr = read $ show byteStr :: String
-    getValueFromYL :: String -> YamlLight -> String
-    getValueFromYL key values =
-      case do
-        yStr <- lookupYL (YStr $ fromString key) values
-        unStr yStr
-      of Nothing    -> ""
-         Just value -> toStringFromByteString value

@@ -1,16 +1,16 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Lib
-    ( cmdNew
-    , cmdRm
-    , cmdSet
-    , cmdGet
-    , cmdPath
-    , cmdHelp
-    ) where
+  ( cmdNew
+  , cmdRm
+  , cmdSet
+  , cmdGet
+  , cmdPath
+  , cmdHelp
+  ) where
 
-import Data.List ( intercalate )
+import Data.List       ( intercalate )
 import Data.List.Split ( splitOn )
-import Literal ( literalFile )
+import Literal         ( literalFile )
 import Project
 
 cmdNew :: [String] -> IO ()
@@ -30,9 +30,9 @@ cmdRm args =
 
 cmdSet :: [String] -> IO ()
 cmdSet args =
-  let projectName:keyLs = splitOn "." $ head args
-      key               = intercalate "." keyLs
-      value             = head $ tail args
+  let projectName:_keyLs = splitOn "." $ head args
+      key                = intercalate "." _keyLs
+      value              = head $ tail args
   in do
     project <- initProject projectName
     shouldExist project
