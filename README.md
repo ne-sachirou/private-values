@@ -91,10 +91,12 @@ What is NOT private-values?
 - private-values dose NOT manage secrets in your organization. [valut](https://vaultproject.io) may help you.
 - private-values dose NOT encrypt your secrets. Use Bcrypt or other crypt methods.
 - private-values dose NOT store your secrets on a safe cloud server. I use private Git repo, or encrypted 7zip archive in a cloud storage for this purpose.
+- private-values is NOT a fast database backend.
 
 What IS private-values?
 --
 - private-values aggregate your private values and files under 1 directory.
+- The values file `values.yml` is editable for human. It's just a YAML format which maps a text key to a text value.
 
 CONTRIBUTING
 --
@@ -102,23 +104,17 @@ CONTRIBUTING
 - Haskell (GHC) & stack
 - Ruby & Bundler
 
-We develop 2 same softwares: Main and Proto.<br/>
-Main is here. This's written in Haskell.<br/>
-Proto is placed at proto/. It's written in Ruby.
+To fix a bug or add a new feature:
 
-1. Fix a bug or add a new feature in Proto.
-  1. Add a new Cucumber scenario.
-  2. `bundle exec rake test`. It must fail.
-  3. Fix a bug or add a new feature.
-  4. `bundle exec rake test`. It must success.
-2. Fix a bug or add a new feature in Main.
-  1. Fix a bug or add a new feature.
-  2. `bundle exec rake build test`. It must success.
+1. Add a new Cucumber scenario.
+2. `bundle exec rake test`. It must fail.
+3. Fix a bug or add a new feature.
+4. `bundle exec rake test`. It must success.
 
 TODO
 --
-- Remove proto/.
-- Short command name.
+- [ ] Remove proto/.
+- [ ] Short command name.
 
 [1]: http://direnv.net/
 <!-- vim:set ft=markdown: -->
