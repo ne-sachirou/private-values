@@ -17,6 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib, Project
   build-depends:       base >= 4.7 && < 5
+                     , bytestring >= 0.10
                      , containers >= 0.5
                      , directory >= 1.2
                      , regex-tdfa >= 1.2
@@ -31,6 +32,7 @@ executable private-values
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
+                     , bytestring
                      , containers
                      , directory
                      , regex-tdfa

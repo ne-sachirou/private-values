@@ -43,7 +43,7 @@ cmdGet args =
     project <- initProject projectName
     shouldExist project
     value <- getValue project key
-    putStr value
+    putStrLn value
 
 cmdPath :: [String] -> IO ()
 cmdPath args =

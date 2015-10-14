@@ -1,5 +1,6 @@
 module Project where
 
+import Data.ByteString
 import Data.Map.Lazy as Map
 import Data.Maybe
 import Data.String ( fromString )
@@ -52,25 +53,29 @@ setValue project key value =
   let valuesPath = path project ++ "/values.yml"
   in do
     yValues <- parseYamlFile valuesPath
-    encodeFile valuesPath $ update (\ _ -> Just value) key (toMap yValues)
+    encodeFile valuesPath $ update (\ _ -> Just value) key $ toMapFromYL yValues
   where
-    toString :: YamlLight -> String
-    toString value = fromMaybe "" $ fmap show $ unStr value
-    toMap :: YamlLight -> Map String String
-    toMap yValues =
+    toStringFromByteString :: ByteString -> String
+    toStringFromByteString byteStr = read $ show byteStr :: String
+    toStringFromYL :: YamlLight -> String
+    toStringFromYL value = fromMaybe "" $ fmap toStringFromByteString $ unStr value
+    toMapFromYL :: YamlLight -> Map String String
+    toMapFromYL yValues =
       case unMap yValues of
         Nothing     -> fromList []
-        Just values -> mapKeys toString $ Map.map toString values
+        Just values -> mapKeys toStringFromYL $ Map.map toStringFromYL values
 
 getValue :: Project -> String -> IO String
 getValue project key =
   do values <- parseYamlFile $ path project ++ "/values.yml"
-     return $ getValueFromYamlLight key values
+     return $ getValueFromYL key values
   where
-    getValueFromYamlLight :: String -> YamlLight -> String
-    getValueFromYamlLight key values =
+    toStringFromByteString :: ByteString -> String
+    toStringFromByteString byteStr = read $ show byteStr :: String
+    getValueFromYL :: String -> YamlLight -> String
+    getValueFromYL key values =
       case do
         yStr <- lookupYL (YStr $ fromString key) values
         unStr yStr
       of Nothing    -> ""
-         Just value -> show value
+         Just value -> toStringFromByteString value
