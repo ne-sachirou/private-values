@@ -13,28 +13,32 @@ import Literal ( literalFile )
 import Project
 
 cmdNew :: [String] -> IO ()
-cmdNew args = let projectName:_ = args
+cmdNew args =
+  let projectName:_ = args
   in do
     project <- initProject projectName
     create project
 
 cmdRm :: [String] -> IO ()
-cmdRm args = let projectName:_ = args
+cmdRm args =
+  let projectName:_ = args
   in do
     project <- initProject projectName
     shouldExist project
     destroy project
 
 cmdSet :: [String] -> IO ()
-cmdSet args = let projectName:key:_ = splitOn "." $ head args
-                  value             = head $ tail args
+cmdSet args =
+  let projectName:key:_ = splitOn "." $ head args
+      value             = head $ tail args
   in do
     project <- initProject projectName
     shouldExist project
     setValue project key value
 
 cmdGet :: [String] -> IO ()
-cmdGet args = let projectName:key:_ = splitOn "." $ head args
+cmdGet args =
+  let projectName:key:_ = splitOn "." $ head args
   in do
     project <- initProject projectName
     shouldExist project
@@ -42,7 +46,8 @@ cmdGet args = let projectName:key:_ = splitOn "." $ head args
     putStr value
 
 cmdPath :: [String] -> IO ()
-cmdPath args = let projectName:_ = args
+cmdPath args =
+  let projectName:_ = args
   in do
     project <- initProject projectName
     shouldExist project

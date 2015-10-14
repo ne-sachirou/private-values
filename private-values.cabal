@@ -17,11 +17,12 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib, Project
   build-depends:       base >= 4.7 && < 5
-                     , bytestring >= 0.10
+                     , containers >= 0.5
                      , directory >= 1.2
                      , regex-tdfa >= 1.2
                      , split >= 0.2
                      , template-haskell >= 2.10
+                     , yaml >= 0.8
                      , yaml-light >= 0.1
   default-language:    Haskell2010
 
@@ -30,11 +31,12 @@ executable private-values
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                     , bytestring
+                     , containers
                      , directory
                      , regex-tdfa
                      , split
                      , template-haskell
+                     , yaml
                      , yaml-light
                      , private-values
   default-language:    Haskell2010
