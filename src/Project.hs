@@ -53,7 +53,7 @@ setValue project key value =
   let valuesPath = path project ++ "/values.yml"
   in do
     yValues <- parseYamlFile valuesPath
-    encodeFile valuesPath $ update (\ _ -> Just value) key $ toMapFromYL yValues
+    encodeFile valuesPath $ insert key value $ toMapFromYL yValues
   where
     toStringFromByteString :: ByteString -> String
     toStringFromByteString byteStr = read $ show byteStr :: String
