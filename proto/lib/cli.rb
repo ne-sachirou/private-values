@@ -42,7 +42,7 @@ module PrivateValues
       project_name, key = ARGV[1].split '.', 2
       project = Project.new project_name
       the_project_must_exist project
-      $stdout.puts project[key]
+      $stdout.print project[key]
 
     end
 
@@ -50,7 +50,7 @@ module PrivateValues
       project_name = ARGV[1]
       project = Project.new project_name
       the_project_must_exist project
-      $stdout.puts project.path
+      $stdout.print project.path
     end
 
     def cmd_else

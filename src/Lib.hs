@@ -45,7 +45,7 @@ cmdGet args =
     project <- initProject projectName
     shouldExist project
     value <- getValue project key
-    putStrLn value
+    putStr value
 
 cmdPath :: [String] -> IO ()
 cmdPath args =
@@ -53,7 +53,7 @@ cmdPath args =
   in do
     project <- initProject projectName
     shouldExist project
-    putStrLn $ path project
+    putStr $ path project
 
 cmdHelp :: IO ()
 cmdHelp = putStrLn [literalFile|src/Help.txt|]
