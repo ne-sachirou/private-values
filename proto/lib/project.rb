@@ -37,7 +37,7 @@ module PrivateValues
 
     def []= key, value
       values = load_values
-      values[key] = unify_str_value value
+      values[key] = value
       save_values values
     end
 
@@ -51,12 +51,6 @@ module PrivateValues
     def save_values values
       data = values.to_yaml
       File.open("#{path}/values.yml", 'wb'){|f| f.write data }
-    end
-
-    def unify_str_value str
-      return Integer(str) rescue nil
-      return Float(str) rescue nil
-      str
     end
   end
 end

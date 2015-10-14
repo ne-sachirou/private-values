@@ -7,8 +7,8 @@ Feature: Set command
     Then the file "~/.private-values/someProject/values.yml" should contain:
       """
       str1: value1
-      int1: 42
-      float1: 42.0
+      int1: '42'
+      float1: '42.0'
       """
 
   Scenario: Set with irnormal keys

@@ -28,4 +28,4 @@ getValueFromYL key values =
      Just value -> toStrFromByteStr value
 
 toStrFromByteStr :: ByteString -> String
-toStrFromByteStr byteStr = read $ show byteStr :: String
+toStrFromByteStr byteStr = read $ show byteStr
