@@ -1,17 +1,21 @@
 module Project where
 
+import Data.Map.Lazy       ( insert )
+import Data.Yaml           ( encodeFile )
+import Data.Yaml.YamlLight ( parseYamlFile )
 import System.Directory
-import System.Environment ( getEnv )
+import System.Environment  ( getEnv )
 import System.IO
 import Text.Regex.TDFA
+import YamlUtil
 
 data Project = Project { valuesDir :: String, name :: String }
 
 initProject :: String -> IO Project
-initProject name = do
-  validateName name
-  homePath <- getEnv "HOME"
-  return $ Project (homePath ++ "/.private-values") name
+initProject name =
+  do validateName name
+     homePath <- getEnv "HOME"
+     return $ Project (homePath ++ "/.private-values") name
   where
     validateName :: String -> IO ()
     validateName name
@@ -22,7 +26,8 @@ path :: Project -> String
 path (Project valuesDir name) = valuesDir ++ "/" ++ name
 
 shouldExist :: Project -> IO ()
-shouldExist project = let Project _ name = project
+shouldExist project =
+  let Project _ name = project
   in do
     isExist <- doesDirectoryExist $ path project
     case isExist of
@@ -30,7 +35,8 @@ shouldExist project = let Project _ name = project
       True  -> return ()
 
 create :: Project -> IO ()
-create project = let Project valuesDir name = project
+create project =
+  let Project valuesDir name = project
   in do
     createDirectoryIfMissing True valuesDir
     createDirectory $ path project
@@ -38,5 +44,16 @@ create project = let Project valuesDir name = project
     hClose valuesFile
 
 destroy :: Project -> IO ()
-destroy project = do
-  removeDirectoryRecursive $ path project
+destroy project = removeDirectoryRecursive $ path project
+
+setValue :: Project -> String -> String -> IO ()
+setValue project key value =
+  let valuesPath = path project ++ "/values.yml"
+  in do
+    yValues <- parseYamlFile valuesPath
+    encodeFile valuesPath $ insert key value $ toMapFromYL yValues
+
+getValue :: Project -> String -> IO String
+getValue project key =
+  do values <- parseYamlFile $ path project ++ "/values.yml"
+     return $ getValueFromYL key values
