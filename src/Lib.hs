@@ -8,6 +8,7 @@ module Lib
     , cmdHelp
     ) where
 
+import Data.List ( intercalate )
 import Data.List.Split ( splitOn )
 import Literal ( literalFile )
 import Project
@@ -29,7 +30,8 @@ cmdRm args =
 
 cmdSet :: [String] -> IO ()
 cmdSet args =
-  let projectName:key:_ = splitOn "." $ head args
+  let projectName:keyLs = splitOn "." $ head args
+      key               = intercalate "." keyLs
       value             = head $ tail args
   in do
     project <- initProject projectName
