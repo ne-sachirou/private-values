@@ -20,6 +20,10 @@ Given /^run SET command with options "([^"]*)" and "([^"]*)"$/ do |arg1, value|
   step %{I run `private-values set #{arg1} #{value}`}
 end
 
+Given /^run GET command with no options/ do
+  step %{I run `private-values get`}
+end
+
 Given /^run GET command with an option "([^"]*)"$/ do |arg1|
   step %{I run `private-values get #{arg1}`}
 end

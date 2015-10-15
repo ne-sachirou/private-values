@@ -10,6 +10,8 @@ COMMAND
 new PROJECT            Create new private values.
 rm PROJECT             Remove private values.
 set PROJECT.KEY VALUE  Set a private value.
+get                    Get the list of projects.
+get PROJECT            Get the list of private keys & values.
 get PROJECT.KEY        Get the private value.
 path PROJECT           Path to the private files.
 
@@ -96,7 +98,7 @@ What is NOT private-values?
 What IS private-values?
 --
 - private-values aggregate your private values and files under 1 directory.
-- The values file `values.yml` is editable for human. It's just a YAML format which maps a text key to a text value.
+- The values file `values.yml` is editable for human. It's just YAML format which maps a text key to a text value.
 
 CONTRIBUTING
 --
@@ -109,12 +111,15 @@ To fix a bug or add a new feature:
 1. Add a new Cucumber scenario.
 2. `bundle exec rake test`. It must fail.
 3. Fix a bug or add a new feature.
-4. `bundle exec rake test`. It must success.
+4. `bundle exec rake build`
+5. `bundle exec rake test`. It must success.
 
 TODO
 --
 - [ ] Remove proto/.
 - [ ] Short command name.
+- [ ] CI
+- [ ] Release 0.1.0
 
 [1]: http://direnv.net/
 <!-- vim:set ft=markdown: -->
