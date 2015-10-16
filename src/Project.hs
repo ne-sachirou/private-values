@@ -3,8 +3,8 @@ module Project where
 import Data.Map.Lazy       ( insert )
 import Data.Yaml           ( encodeFile )
 import Data.Yaml.YamlLight ( parseYamlFile )
+import FileUtil
 import System.Directory
-import System.Environment  ( getEnv )
 import System.IO
 import Text.Regex.TDFA
 import YamlUtil
@@ -14,8 +14,14 @@ data Project = Project { valuesDir :: String, name :: String }
 initProject :: String -> IO Project
 initProject name =
   do validateName name
-     homePath <- getEnv "HOME"
-     return $ Project (homePath ++ "/.private-values") name
+     homePath <- getHomeDirectory
+     doesRcFileExist <- doesFileExist $ homePath ++ "/private-values.rc"
+     if doesRcFileExist then do
+       config <- parseYamlFile $ homePath ++ "/private-values.rc"
+       valuesDir <- absolutize $ getValueFromYL "values-dir" config
+       return $ Project valuesDir name
+     else do
+       return $ Project (homePath ++ "/.private-values") name
   where
     validateName :: String -> IO ()
     validateName name
