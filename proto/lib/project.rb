@@ -7,6 +7,10 @@ module PrivateValues
       def config values_dir: nil
         @@values_dir = File.expand_path(values_dir || '~/.private-values')
       end
+
+      def projects
+        Dir["#{@@values_dir}/*"].collect{|d| File.basename d }
+      end
     end
 
     def initialize name

@@ -4,9 +4,9 @@ COMMAND
 --
 new PROJECT            Create new private values.
 rm PROJECT             Remove private values.
+projects               List projects.
+keys PROJECT           List keys in the project.
 set PROJECT.KEY VALUE  Set a private value.
-get                    Get the list of projects.
-get PROJECT            Get the list of private keys & values.
 get PROJECT.KEY        Get the private value.
 path PROJECT           Path to the private files.
 

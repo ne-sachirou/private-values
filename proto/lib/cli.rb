@@ -9,12 +9,14 @@ module PrivateValues
       @config = File.exist?(config_file) ? YAML.load_file(config_file) : {}
       Project.config values_dir: @config['values-dir']
       case ARGV[0]
-      when 'new'  then cmd_new
-      when 'set'  then cmd_set
-      when 'rm'   then cmd_rm
-      when 'get'  then cmd_get
-      when 'path' then cmd_path
-      else             cmd_else
+      when 'new'      then cmd_new
+      when 'set'      then cmd_set
+      when 'rm'       then cmd_rm
+      when 'projects' then cmd_projects
+      when 'keys'     then cmd_keys
+      when 'get'      then cmd_get
+      when 'path'     then cmd_path
+      else                 cmd_else
       end
     end
 
@@ -28,6 +30,14 @@ module PrivateValues
     def cmd_rm
       project_name = ARGV[1]
       Project.new(project_name).destroy
+    end
+
+    def cmd_projects
+      $stdout.puts Project.projects
+    end
+
+    def cmd_keys
+      project_name = ARGV[0]
     end
 
     def cmd_set

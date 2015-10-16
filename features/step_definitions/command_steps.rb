@@ -16,12 +16,16 @@ Given /^run RM command with an option "([^"]*)"$/ do |project|
   step %{I run `private-values rm #{project}`}
 end
 
-Given /^run SET command with options "([^"]*)" and "([^"]*)"$/ do |arg1, value|
-  step %{I run `private-values set #{arg1} #{value}`}
+Given /^run PROJECTS command/ do
+  step %{I run `private-values projects`}
 end
 
-Given /^run GET command with no options/ do
-  step %{I run `private-values get`}
+Given /^run KEYS command with an option "([^"]*)"$/ do |project|
+  step %{I run `private-values keys #{project}`}
+end
+
+Given /^run SET command with options "([^"]*)" and "([^"]*)"$/ do |arg1, value|
+  step %{I run `private-values set #{arg1} #{value}`}
 end
 
 Given /^run GET command with an option "([^"]*)"$/ do |arg1|
