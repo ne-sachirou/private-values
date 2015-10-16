@@ -13,6 +13,8 @@ module PrivateValues
       end
     end
 
+    attr_reader :name
+
     def initialize name
       throw 'The project name shold only contain [-A-Za-z0-9_]' if name !~ /\A[-A-Za-z0-9_]+\z/
       @name = name
@@ -33,6 +35,10 @@ module PrivateValues
 
     def destroy
       FileUtils.rm_rf path, secure: true
+    end
+
+    def keys
+      load_values.keys
     end
 
     def [] key

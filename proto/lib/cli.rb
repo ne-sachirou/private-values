@@ -37,7 +37,10 @@ module PrivateValues
     end
 
     def cmd_keys
-      project_name = ARGV[0]
+      project_name = ARGV[1]
+      project = Project.new project_name
+      the_project_must_exist project
+      $stdout.puts project.keys
     end
 
     def cmd_set
@@ -69,8 +72,8 @@ module PrivateValues
 
     def the_project_must_exist project
       unless project.exist?
-        throw 'The project "someProject" isn\'t exist.
-Run `private-values new someProject`.'
+        throw %{The project "#{project.name}" isn\'t exist.
+Run `private-values new #{project.name}`.}
       end
     end
   end
