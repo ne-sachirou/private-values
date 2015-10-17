@@ -8,7 +8,7 @@ license-file:        LICENSE
 author:              ne_Sachirou
 maintainer:          utakata.c4se@gmail.com
 copyright:           2015 ne_Sachirou
-category:            Web
+category:            Cli
 build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10

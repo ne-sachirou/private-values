@@ -1,12 +1,12 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Lib
-  ( cmdNew
+  ( cmdProjects
+  , cmdNew
   , cmdRm
-  , cmdProjects
+  , cmdPath
   , cmdKeys
   , cmdSet
   , cmdGet
-  , cmdPath
   , cmdHelp
   ) where
 
@@ -14,6 +14,11 @@ import Data.List       ( intercalate )
 import Data.List.Split ( splitOn )
 import Literal         ( literalFile )
 import Project
+
+cmdProjects :: [String] -> IO ()
+cmdProjects args =
+  do projectNames <- listProjectNames
+     putStrLn $ intercalate "\n" projectNames
 
 cmdNew :: [String] -> IO ()
 cmdNew args =
@@ -30,10 +35,13 @@ cmdRm args =
     shouldExist project
     destroy project
 
-cmdProjects :: [String] -> IO ()
-cmdProjects args =
-  do projectNames <- listProjectNames
-     putStrLn $ intercalate "\n" projectNames
+cmdPath :: [String] -> IO ()
+cmdPath args =
+  let projectName:_ = args
+  in do
+    project <- initProject projectName
+    shouldExist project
+    putStr $ path project
 
 cmdKeys :: [String] -> IO()
 cmdKeys args =
@@ -62,14 +70,6 @@ cmdGet args =
     shouldExist project
     value <- getValue project key
     putStr value
-
-cmdPath :: [String] -> IO ()
-cmdPath args =
-  let projectName:_ = args
-  in do
-    project <- initProject projectName
-    shouldExist project
-    putStr $ path project
 
 cmdHelp :: IO ()
 cmdHelp = putStrLn [literalFile|src/Help.txt|]

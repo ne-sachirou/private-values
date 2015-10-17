@@ -2,13 +2,13 @@ private-values [COMMAND]
 
 COMMAND
 --
+projects               List projects.
 new PROJECT            Create new private values.
 rm PROJECT             Remove private values.
-projects               List projects.
+path PROJECT           Path to the private files.
 keys PROJECT           List keys in the project.
 set PROJECT.KEY VALUE  Set a private value.
 get PROJECT.KEY        Get the private value.
-path PROJECT           Path to the private files.
 
 ~/private-values.rc
 --
