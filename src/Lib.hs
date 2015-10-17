@@ -3,6 +3,7 @@ module Lib
   ( cmdNew
   , cmdRm
   , cmdProjects
+  , cmdKeys
   , cmdSet
   , cmdGet
   , cmdPath
@@ -33,6 +34,15 @@ cmdProjects :: [String] -> IO ()
 cmdProjects args =
   do projectNames <- listProjectNames
      putStrLn $ intercalate "\n" projectNames
+
+cmdKeys :: [String] -> IO()
+cmdKeys args =
+  let projectName:_ = args
+  in do
+    project <- initProject projectName
+    shouldExist project
+    keys <- getKeys project
+    putStrLn $ intercalate "\n" keys
 
 cmdSet :: [String] -> IO ()
 cmdSet args =

@@ -1,6 +1,6 @@
 module Project where
 
-import Data.Map.Lazy       ( insert )
+import Data.Map.Lazy       ( insert, keys )
 import Data.Yaml           ( encodeFile )
 import Data.Yaml.YamlLight ( parseYamlFile )
 import FileUtil
@@ -65,6 +65,13 @@ create project =
 
 destroy :: Project -> IO ()
 destroy project = removeDirectoryRecursive $ path project
+
+getKeys :: Project -> IO [String]
+getKeys project =
+  let valuesPath = path project ++ "/values.yml"
+  in do
+    yValues <- parseYamlFile valuesPath
+    return $ keys $ toMapFromYL yValues
 
 setValue :: Project -> String -> String -> IO ()
 setValue project key value =

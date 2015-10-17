@@ -10,6 +10,7 @@ main = do
     "new":rest      -> cmdNew rest
     "rm":rest       -> cmdRm rest
     "projects":rest -> cmdProjects rest
+    "keys":rest     -> cmdKeys rest
     "set":rest      -> cmdSet rest
     "get":rest      -> cmdGet rest
     "path":rest     -> cmdPath rest
