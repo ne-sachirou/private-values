@@ -10,9 +10,13 @@ import System.IO
 import Text.Regex.TDFA
 import YamlUtil
 
-data ProjectConfig = ProjectConfig { valuesDir :: String }
+listProjectNames :: IO [String]
+listProjectNames =
+  do ProjectConfig valuesDir <- getProjectConfig
+     paths <- getDirectoryContents valuesDir
+     return [ path | path <- map takeBaseName paths, not $ path =~ "^[\\.]*$" ]
 
-data Project = Project { config :: ProjectConfig, name :: String }
+data ProjectConfig = ProjectConfig { valuesDir :: String }
 
 getProjectConfig :: IO ProjectConfig
 getProjectConfig =
@@ -25,11 +29,7 @@ getProjectConfig =
      else do
        return $ ProjectConfig (homePath ++ "/.private-values")
 
-listProjectNames :: IO [String]
-listProjectNames =
-  do ProjectConfig valuesDir <- getProjectConfig
-     paths <- getDirectoryContents valuesDir
-     return [ path | path <- map takeBaseName paths, not $ path =~ "^[\\.]*$" ]
+data Project = Project { config :: ProjectConfig, name :: String }
 
 initProject :: String -> IO Project
 initProject name =

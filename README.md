@@ -116,7 +116,6 @@ To fix a bug or add a new feature:
 
 TODO
 --
-- [ ] Remove proto/.
 - [ ] Short command name.
 - [ ] CI
 - [ ] Release 0.1.0
