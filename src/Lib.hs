@@ -2,6 +2,7 @@
 module Lib
   ( cmdNew
   , cmdRm
+  , cmdProjects
   , cmdSet
   , cmdGet
   , cmdPath
@@ -27,6 +28,11 @@ cmdRm args =
     project <- initProject projectName
     shouldExist project
     destroy project
+
+cmdProjects :: [String] -> IO ()
+cmdProjects args =
+  do projectNames <- listProjectNames
+     putStrLn $ intercalate "\n" projectNames
 
 cmdSet :: [String] -> IO ()
 cmdSet args =

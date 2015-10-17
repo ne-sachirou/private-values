@@ -5,23 +5,37 @@ import Data.Yaml           ( encodeFile )
 import Data.Yaml.YamlLight ( parseYamlFile )
 import FileUtil
 import System.Directory
+import System.FilePath
 import System.IO
 import Text.Regex.TDFA
 import YamlUtil
 
-data Project = Project { valuesDir :: String, name :: String }
+data ProjectConfig = ProjectConfig { valuesDir :: String }
 
-initProject :: String -> IO Project
-initProject name =
-  do validateName name
-     homePath <- getHomeDirectory
+data Project = Project { config :: ProjectConfig, name :: String }
+
+getProjectConfig :: IO ProjectConfig
+getProjectConfig =
+  do homePath <- getHomeDirectory
      doesRcFileExist <- doesFileExist $ homePath ++ "/private-values.rc"
      if doesRcFileExist then do
        config <- parseYamlFile $ homePath ++ "/private-values.rc"
        valuesDir <- absolutize $ getValueFromYL "values-dir" config
-       return $ Project valuesDir name
+       return $ ProjectConfig valuesDir
      else do
-       return $ Project (homePath ++ "/.private-values") name
+       return $ ProjectConfig (homePath ++ "/.private-values")
+
+listProjectNames :: IO [String]
+listProjectNames =
+  do ProjectConfig valuesDir <- getProjectConfig
+     paths <- getDirectoryContents valuesDir
+     return [ path | path <- map takeBaseName paths, not $ path =~ "^[\\.]*$" ]
+
+initProject :: String -> IO Project
+initProject name =
+  do validateName name
+     config <- getProjectConfig
+     return $ Project config name
   where
     validateName :: String -> IO ()
     validateName name
@@ -29,7 +43,7 @@ initProject name =
       | otherwise                                = return ()
 
 path :: Project -> String
-path (Project valuesDir name) = valuesDir ++ "/" ++ name
+path (Project (ProjectConfig valuesDir) name) = valuesDir ++ "/" ++ name
 
 shouldExist :: Project -> IO ()
 shouldExist project =
@@ -42,7 +56,7 @@ shouldExist project =
 
 create :: Project -> IO ()
 create project =
-  let Project valuesDir name = project
+  let Project (ProjectConfig valuesDir) name = project
   in do
     createDirectoryIfMissing True valuesDir
     createDirectory $ path project
