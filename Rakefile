@@ -8,7 +8,9 @@ Cucumber::Rake::Task.new :features do |t|
 end
 
 task :build do
-  sh 'stack build'
+  sh 'hlint . -c'
+  sh 'stack build -j4'
+  FileUtils.mkdir 'bin' unless File.exist? 'bin'
   FileUtils.cp `stack exec which private-values`.strip, 'bin', preserve: true
   readme = Erubis::Eruby.new(File.read("#{__dir__}/src/README.md.erb", mode: 'r:utf-8')).result({
     help: File.read("#{__dir__}/src/Help.txt", mode: 'r:utf-8').strip,

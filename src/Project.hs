@@ -1,11 +1,15 @@
 module Project where
 
-import Data.Map.Lazy       ( insert, keys )
-import Data.Yaml           ( encodeFile )
-import Data.Yaml.YamlLight ( parseYamlFile )
+import Codec.Binary.UTF8.String ( encodeString )
+import Control.Monad ( unless )
+import Data.Map.Lazy ( insert, keys )
+import qualified Data.Text.Encoding as Text
+import qualified Data.Text.IO as Text
+import Data.Yaml ( encode )
+import Data.Yaml.YamlLight ( parseYaml, parseYamlFile )
 import FileUtil
 import System.Directory
-import System.FilePath
+import System.FilePath ( takeBaseName )
 import System.IO
 import Text.Regex.TDFA
 import YamlUtil
@@ -26,7 +30,7 @@ getProjectConfig =
        config <- parseYamlFile $ homePath ++ "/private-values.rc"
        valuesDir <- absolutize $ getValueFromYL "values-dir" config
        return $ ProjectConfig valuesDir
-     else do
+     else
        return $ ProjectConfig (homePath ++ "/.private-values")
 
 data Project = Project { config :: ProjectConfig, name :: String }
@@ -50,9 +54,7 @@ shouldExist project =
   let Project _ name = project
   in do
     isExist <- doesDirectoryExist $ path project
-    case isExist of
-      False -> fail $ "The project \"" ++ name ++ "\" isn't exist.\nRun `private-values new " ++ name ++ "`."
-      True  -> return ()
+    unless isExist $ fail $ "The project \"" ++ name ++ "\" isn't exist.\nRun `private-values new " ++ name ++ "`."
 
 create :: Project -> IO ()
 create project =
@@ -78,9 +80,10 @@ setValue project key value =
   let valuesPath = path project ++ "/values.yml"
   in do
     yValues <- parseYamlFile valuesPath
-    encodeFile valuesPath $ insert key value $ toMapFromYL yValues
+    let yaml = Text.decodeUtf8 $ encode $ insert key value $ toMapFromYL yValues
+    Text.writeFile valuesPath yaml
 
 getValue :: Project -> String -> IO String
 getValue project key =
   do values <- parseYamlFile $ path project ++ "/values.yml"
-     return $ getValueFromYL key values
+     return $ getValueFromYL (encodeString key) values

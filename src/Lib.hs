@@ -1,4 +1,4 @@
-{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE QuasiQuotes, OverloadedStrings #-}
 module Lib
   ( cmdProjects
   , cmdNew
@@ -10,10 +10,11 @@ module Lib
   , cmdHelp
   ) where
 
-import Data.List       ( intercalate )
+import Data.List ( intercalate )
 import Data.List.Split ( splitOn )
-import Literal         ( literalFile )
+import Literal ( literalFile )
 import Project
+import System.IO ( hPutStr, hSetEncoding, stdout, utf8 )
 
 cmdProjects :: [String] -> IO ()
 cmdProjects args =
@@ -69,6 +70,7 @@ cmdGet args =
     project <- initProject projectName
     shouldExist project
     value <- getValue project key
+    hSetEncoding stdout utf8
     putStr value
 
 cmdHelp :: IO ()

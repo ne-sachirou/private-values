@@ -10,6 +10,17 @@ Feature: Keys command
       str2
       """
 
+  Scenario: List Unicode keys
+    Given a project named "someProject"
+    And run SET command with options "someProject.this-value" and "この値"
+    And run SET command with options "someProject.その値" and "'That value'"
+    And run KEYS command with an option "someProject"
+    Then it should pass with exactly:
+      """
+      this-value
+      その値
+      """
+
   Scenario: List keys of a project, but the project isn't exist
     Given run KEYS command with an option "someProject"
     Then it should fail with:

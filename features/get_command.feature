@@ -11,6 +11,15 @@ Feature: Get command
     And run GET command with an option "someProject.float1"
     Then the output should contain exactly "42.0"
 
+  Scenario: Get Unicode keys and values
+    Given a project named "someProject"
+    And run SET command with options "someProject.this-value" and "この値"
+    And run GET command with an option "someProject.this-value"
+    Then the output should contain exactly "この値"
+    Given run SET command with options "someProject.その値" and "'That value'"
+    And run GET command with an option "someProject.その値"
+    Then the output should contain exactly "That value"
+
   Scenario: Get a value, but the project isn't exist
     Given run GET command with an option "someProject.key"
     Then it should fail with:

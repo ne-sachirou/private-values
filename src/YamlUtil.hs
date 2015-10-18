@@ -4,14 +4,15 @@ module YamlUtil
   , getValueFromYL
   ) where
 
-import Data.ByteString      ( ByteString )
+import Data.ByteString ( ByteString )
 import Data.Map.Lazy as Map ( Map, fromList, map, mapKeys )
-import Data.Maybe           ( fromMaybe )
-import Data.String          ( fromString )
-import Data.Yaml.YamlLight  ( YamlLight ( YStr ), lookupYL, unMap, unStr )
+import Data.Maybe ( maybe )
+import Data.String ( fromString )
+import qualified Data.Text.Encoding as Text
+import Data.Yaml.YamlLight ( YamlLight ( YStr ), lookupYL, unMap, unStr )
 
 toStringFromYL :: YamlLight -> String
-toStringFromYL value = fromMaybe "" $ fmap toStrFromByteStr $ unStr value
+toStringFromYL value = maybe "" toStrFromByteStr $ unStr value
 
 toMapFromYL :: YamlLight -> Map String String
 toMapFromYL yValues =
@@ -28,4 +29,4 @@ getValueFromYL key values =
      Just value -> toStrFromByteStr value
 
 toStrFromByteStr :: ByteString -> String
-toStrFromByteStr byteStr = read $ show byteStr
+toStrFromByteStr byteStr = read $ show (Text.decodeUtf8 byteStr)
