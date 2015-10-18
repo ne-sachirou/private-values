@@ -29,6 +29,16 @@ Feature: Set command
       white space2: value
       """
 
+  Scenario: Set Unicode keys and values
+    Given a project named "someProject"
+    And run SET command with options "someProject.this-value" and "この値"
+    And run SET command with options "someProject.その値" and "'That value'"
+    Then the file "~/.private-values/someProject/values.yml" should contain:
+      """
+      その値: That value
+      this-value: この値
+      """
+
   Scenario: Set a value, but the project isn't exist
     Given run SET command with options "someProject.key" and "value"
     Then it should fail with:

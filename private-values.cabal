@@ -25,6 +25,8 @@ library
                      , regex-tdfa >= 1.2
                      , split >= 0.2
                      , template-haskell >= 2.10
+                     , text >= 1.2
+                     , utf8-string >= 1.0
                      , yaml >= 0.8
                      , yaml-light >= 0.1
   default-language:    Haskell2010
@@ -42,6 +44,8 @@ executable private-values
                      , regex-tdfa
                      , split
                      , template-haskell
+                     , text
+                     , utf8-string
                      , yaml
                      , yaml-light
                      , private-values
