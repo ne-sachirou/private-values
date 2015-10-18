@@ -1,4 +1,4 @@
-{-# LANGUAGE QuasiQuotes, OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 module Lib
   ( cmdProjects
   , cmdNew

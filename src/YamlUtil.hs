@@ -22,11 +22,10 @@ toMapFromYL yValues =
 
 getValueFromYL :: String -> YamlLight -> String
 getValueFromYL key values =
-  case do
-    yStr <- lookupYL (YStr $ fromString key) values
-    unStr yStr
+  case do yStr <- lookupYL (YStr $ fromString key) values
+          unStr yStr
   of Nothing    -> ""
      Just value -> toStrFromByteStr value
 
 toStrFromByteStr :: ByteString -> String
-toStrFromByteStr byteStr = read $ show (Text.decodeUtf8 byteStr)
+toStrFromByteStr byteStr = read $ show $ Text.decodeUtf8 byteStr
