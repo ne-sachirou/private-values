@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/ne-sachirou/private-values.svg)](https://travis-ci.org/ne-sachirou/private-values)
-
 private-values
 ==
 Delete private values and private files from youre git repos.
