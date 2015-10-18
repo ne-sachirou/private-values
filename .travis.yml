@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 language: haskell
 ghc:
   - 7.6
@@ -9,5 +11,8 @@ install:
   - "sudo apt-get -y install ruby2.2 stack hlint"
   - "sudo gem update"
   - "sudo gem install bundler"
-before_script: "bundle install"
+before_script:
+  - "bundle install"
+  - "hlint -v"
+  - "bundle exec cucumber --version"
 script: "bundle exec rake build test"
