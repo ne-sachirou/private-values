@@ -9,8 +9,5 @@ install:
   - "sudo apt-get -y install ruby2.2 stack hlint"
   - "sudo gem update"
   - "sudo gem install bundler"
-before_script:
-  - "bundle install"
-  - "hlint -v"
-  - "bundle exec cucumber --version"
-script: "bundle exec rake build test"
+before_script: "bundle install"
+script: "bundle exec rake build_on_travisci test"
