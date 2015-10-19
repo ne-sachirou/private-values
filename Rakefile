@@ -12,7 +12,7 @@ task :build do
     help: File.read("#{__dir__}/src/Help.txt", mode: 'r:utf-8').strip,
   })
   File.open("#{__dir__}/README.md", 'w:utf-8'){|f| f.write readme }
-  sh 'hlint . -c'
+  sh 'stack exec hlint -- . -c'
   sh 'stack build -j4'
   FileUtils.mkdir 'bin' unless File.exist? 'bin'
   FileUtils.cp `stack exec which private-values`.strip, 'bin', preserve: true
