@@ -102,8 +102,8 @@ What IS private-values?
 
 TODO
 --
-- [ ] Short command name.
-- [ ] Release 0.1.0
+- [ ] Logo
+- [ ] Release 0.1.0, Homebrew, Chocolatiey, apt
 
 [1]: http://direnv.net/
 <!-- vim:set ft=markdown: -->
