@@ -7,7 +7,7 @@ Cucumber::Rake::Task.new :features do |t|
   t.cucumber_opts = 'features --format pretty'
 end
 
-desc 'Build this project.'
+desc 'Build this project'
 task :build do
   readme = Erubis::Eruby.new(File.read("#{__dir__}/src/README.md.erb", mode: 'r:utf-8')).result({
     help: File.read("#{__dir__}/src/Help.txt", mode: 'r:utf-8').strip,
@@ -18,8 +18,13 @@ task :build do
   FileUtils.cp `stack exec which private-values`.strip, 'bin/', preserve: true
 end
 
-desc 'Rus tests.'
+desc 'Rus tests'
 task test: [:features] do
   sh 'stack test'
   sh 'stack exec hlint -- . -c'
+end
+
+desc 'Install bin'
+task :install do
+  sh 'stack install'
 end

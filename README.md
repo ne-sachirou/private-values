@@ -22,6 +22,9 @@ values-dir: ~/.private-values
 
 Usage
 --
+### Install
+Donwload a binary from [releases](releases) and put it into the PATH directory.
+
 ### Global Setting
 Put the config file at `~/private-values.rc`:
 
