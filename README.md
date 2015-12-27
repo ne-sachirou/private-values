@@ -23,7 +23,7 @@ values-dir: ~/.private-values
 Usage
 --
 ### Install
-Donwload a binary from [releases](releases) and put it into the PATH directory.
+Donwload a binary from [releases](https://github.com/ne-sachirou/private-values/releases) and put it into the PATH directory.
 
 ### Global Setting
 Put the config file at `~/private-values.rc`:
