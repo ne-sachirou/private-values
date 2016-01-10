@@ -1,31 +1,12 @@
 module YamlUtil
-  ( toStringFromYL
-  , toMapFromYL
-  , getValueFromYL
+  ( decodeYamlFile
   ) where
 
-import Data.ByteString ( ByteString )
-import Data.Map.Lazy as Map ( Map, fromList, map, mapKeys )
-import Data.Maybe ( maybe )
-import Data.String ( fromString )
-import qualified Data.Text.Encoding as Text
-import Data.Yaml.YamlLight ( YamlLight ( YStr ), lookupYL, unMap, unStr )
+import Data.ByteString as ByteString ( readFile )
+import Data.Maybe ( fromMaybe )
+import Data.Yaml ( decode, object, Value )
 
-toStringFromYL :: YamlLight -> String
-toStringFromYL value = maybe "" toStrFromByteStr $ unStr value
-
-toMapFromYL :: YamlLight -> Map String String
-toMapFromYL yValues =
-  case unMap yValues of
-    Nothing     -> fromList []
-    Just values -> mapKeys toStringFromYL $ Map.map toStringFromYL values
-
-getValueFromYL :: String -> YamlLight -> String
-getValueFromYL key values =
-  case do yStr <- lookupYL (YStr $ fromString key) values
-          unStr yStr
-  of Nothing    -> ""
-     Just value -> toStrFromByteStr value
-
-toStrFromByteStr :: ByteString -> String
-toStrFromByteStr byteStr = read $ show $ Text.decodeUtf8 byteStr
+decodeYamlFile :: String -> IO Value
+decodeYamlFile path =
+  do yaml <- ByteString.readFile path
+     return $ fromMaybe (object []) (decode yaml :: Maybe Value)

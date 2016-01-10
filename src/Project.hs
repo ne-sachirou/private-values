@@ -1,24 +1,28 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Project where
 
-import Codec.Binary.UTF8.String ( encodeString )
+import Control.Lens ( (^.), (^?), (&), (?~), at )
 import Control.Monad ( unless )
-import Data.Map.Lazy ( insert, keys )
-import qualified Data.Text.Encoding as Text
-import qualified Data.Text.IO as Text
-import Data.Yaml ( encode )
-import Data.Yaml.YamlLight ( parseYaml, parseYamlFile )
-import FileUtil
-import System.Directory
+import Data.Aeson.Lens ( key, _Object, _String )
+import Data.HashMap.Strict ( keys )
+import Data.Maybe ( fromMaybe )
+import qualified Data.Text as Text ( pack, unpack )
+import qualified Data.Text.Encoding as Text ( decodeUtf8 )
+import qualified Data.Text.IO as Text ( writeFile )
+import Data.Yaml ( encode, object, Value ( String ) )
+import FileUtil ( absolutize )
+import System.Directory ( createDirectory, createDirectoryIfMissing, doesFileExist, doesDirectoryExist, getDirectoryContents, getHomeDirectory, removeDirectoryRecursive )
 import System.FilePath ( takeBaseName )
-import System.IO
-import Text.Regex.TDFA
-import YamlUtil
+import System.IO ( hClose, IOMode ( WriteMode ), openFile )
+import Text.Regex.TDFA ( (=~) )
+import YamlUtil ( decodeYamlFile )
 
 listProjectNames :: IO [String]
 listProjectNames =
   do ProjectConfig valuesDir <- getProjectConfig
      paths <- getDirectoryContents valuesDir
-     return [ path | path <- map takeBaseName paths, not $ path =~ "^[\\.]*$" ]
+     return [ path | path <- map takeBaseName paths, not $ path =~ ("^[\\.]*$" :: String) ]
 
 data ProjectConfig = ProjectConfig { valuesDir :: String }
 
@@ -26,10 +30,10 @@ getProjectConfig :: IO ProjectConfig
 getProjectConfig =
   do homePath <- getHomeDirectory
      doesRcFileExist <- doesFileExist $ homePath ++ "/private-values.rc"
-     if doesRcFileExist then do
-       config <- parseYamlFile $ homePath ++ "/private-values.rc"
-       valuesDir <- absolutize $ getValueFromYL "values-dir" config
-       return $ ProjectConfig valuesDir
+     if doesRcFileExist then
+       do config <- decodeYamlFile $ homePath ++ "/private-values.rc"
+          valuesDir <- absolutize $ Text.unpack $ config ^. key "values-dir" . _String
+          return $ ProjectConfig valuesDir
      else
        return $ ProjectConfig (homePath ++ "/.private-values")
 
@@ -43,7 +47,7 @@ initProject name =
   where
     validateName :: String -> IO ()
     validateName name
-      | (name =~ "^[-A-Za-z0-9_]+$" :: Int) == 0 = fail "The project name shold only contain [-A-Za-z0-9_]"
+      | (name =~ ("^[-A-Za-z0-9_]+$" :: String) :: Int) == 0 = fail "The project name shold only contain [-A-Za-z0-9_]"
       | otherwise                                = return ()
 
 path :: Project -> String
@@ -52,18 +56,16 @@ path (Project (ProjectConfig valuesDir) name) = valuesDir ++ "/" ++ name
 shouldExist :: Project -> IO ()
 shouldExist project =
   let Project _ name = project
-  in do
-    isExist <- doesDirectoryExist $ path project
-    unless isExist $ fail $ "The project \"" ++ name ++ "\" isn't exist.\nRun `private-values new " ++ name ++ "`."
+  in do isExist <- doesDirectoryExist $ path project
+        unless isExist $ fail $ "The project \"" ++ name ++ "\" isn't exist.\nRun `private-values new " ++ name ++ "`."
 
 create :: Project -> IO ()
 create project =
   let Project (ProjectConfig valuesDir) name = project
-  in do
-    createDirectoryIfMissing True valuesDir
-    createDirectory $ path project
-    valuesFile <- openFile (path project ++ "/values.yml") WriteMode
-    hClose valuesFile
+  in do createDirectoryIfMissing True valuesDir
+        createDirectory $ path project
+        valuesFile <- openFile (path project ++ "/values.yml") WriteMode
+        hClose valuesFile
 
 destroy :: Project -> IO ()
 destroy project = removeDirectoryRecursive $ path project
@@ -71,19 +73,17 @@ destroy project = removeDirectoryRecursive $ path project
 getKeys :: Project -> IO [String]
 getKeys project =
   let valuesPath = path project ++ "/values.yml"
-  in do
-    yValues <- parseYamlFile valuesPath
-    return $ keys $ toMapFromYL yValues
+  in do values <- decodeYamlFile valuesPath
+        return $ fmap Text.unpack $ keys (values ^. _Object)
 
 setValue :: Project -> String -> String -> IO ()
-setValue project key value =
+setValue project k v =
   let valuesPath = path project ++ "/values.yml"
-  in do
-    yValues <- parseYamlFile valuesPath
-    let yaml = Text.decodeUtf8 $ encode $ insert key value $ toMapFromYL yValues
-    Text.writeFile valuesPath yaml
+  in do values <- decodeYamlFile valuesPath
+        let yaml = encode $ values & _Object . at (Text.pack k) ?~ String (Text.pack v)
+        Text.writeFile valuesPath $ Text.decodeUtf8 yaml
 
 getValue :: Project -> String -> IO String
-getValue project key =
-  do values <- parseYamlFile $ path project ++ "/values.yml"
-     return $ getValueFromYL (encodeString key) values
+getValue project k =
+  do values <- decodeYamlFile $ path project ++ "/values.yml"
+     return $ Text.unpack (values ^. key (Text.pack k) . _String)

@@ -17,8 +17,8 @@ Feature: Keys command
     And run KEYS command with an option "someProject"
     Then it should pass with exactly:
       """
-      this-value
       その値
+      this-value
       """
 
   Scenario: List keys of a project, but the project isn't exist

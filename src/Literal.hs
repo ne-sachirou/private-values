@@ -1,13 +1,12 @@
-module Literal where
+module Literal
+  ( literalFile
+  ) where
 
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
-literally :: String -> Q Exp
-literally = return . LitE . StringL
-
 literal :: QuasiQuoter
-literal = QuasiQuoter { quoteExp = literally }
+literal = QuasiQuoter { quoteExp = return . LitE . StringL }
 
 literalFile :: QuasiQuoter
 literalFile = quoteFile literal
