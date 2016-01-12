@@ -74,7 +74,7 @@ getKeys :: Project -> IO [String]
 getKeys project =
   let valuesPath = path project ++ "/values.yml"
   in do values <- decodeYamlFile valuesPath
-        return $ fmap Text.unpack $ keys (values ^. _Object)
+        return (Text.unpack <$> keys (values ^. _Object))
 
 setValue :: Project -> String -> String -> IO ()
 setValue project k v =
