@@ -1,5 +1,5 @@
 flags: {}
 packages:
 - '.'
-extra-deps: [yaml-light-0.1.4, HsSyck-0.53]
-resolver: lts-3.7
+extra-deps: []
+resolver: lts-4.2
