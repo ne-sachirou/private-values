@@ -15,7 +15,7 @@ task :build do
   File.open("#{__dir__}/README.md", 'w:utf-8'){|f| f.write readme }
   sh 'stack build'
   FileUtils.mkdir 'bin' unless File.exist? 'bin'
-  FileUtils.cp `stack exec which private-values`.strip, 'bin/', preserve: true
+  FileUtils.cp `stack exec which private-values`.chomp, 'bin/', preserve: true
 end
 
 desc 'Rus tests'
