@@ -26,5 +26,5 @@ end
 
 desc 'Install bin'
 task :install do
-  sh 'stack install'
+  FileUtils.cp 'bin/private-values', '/usr/local/bin/', preserve: true
 end

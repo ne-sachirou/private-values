@@ -7,30 +7,30 @@ license:             GPL-3
 license-file:        LICENSE
 author:              ne_Sachirou
 maintainer:          utakata.c4se@gmail.com
-copyright:           2015 ne_Sachirou
+copyright:           2015-2017 ne_Sachirou
 category:            Cli
 build-type:          Simple
 -- extra-source-files:
-cabal-version:       >=1.10
+cabal-version:       >=1.24
 
 library
   hs-source-dirs:      src
   exposed-modules:     FileUtil, Lib, Project, YamlUtil
-  build-depends:       base >= 4.7 && < 5
-                     , aeson >= 0.8
-                     , bytestring >= 0.10
-                     , directory >= 1.2
-                     , filepath >= 1.4
-                     , lens >= 4.12
-                     , lens-aeson >= 1.0
-                     , MissingH >= 1.3
-                     , regex-tdfa >= 1.2
-                     , split >= 0.2
-                     , template-haskell >= 2.10
-                     , text >= 1.2
-                     , unordered-containers >= 0.2
-                     , utf8-string >= 1.0
-                     , yaml >= 0.8
+  build-depends:       base >= 4.9 && < 5
+                     , aeson
+                     , bytestring
+                     , directory
+                     , filepath
+                     , lens
+                     , lens-aeson
+                     , MissingH
+                     , regex-tdfa
+                     , split
+                     , template-haskell
+                     , text
+                     , unordered-containers
+                     , utf8-string
+                     , yaml
   default-language:    Haskell2010
 
 executable private-values
@@ -48,8 +48,8 @@ test-suite private-values-test
   build-depends:       base
                      , directory
                      , hlint
-                     , hspec >= 2.1
-                     , QuickCheck >= 2.8
+                     , hspec
+                     , QuickCheck
                      , private-values
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
