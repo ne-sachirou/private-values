@@ -24,7 +24,7 @@ listProjectNames =
      paths <- getDirectoryContents valuesDir
      return [ path | path <- map takeBaseName paths, not $ path =~ ("^[\\.]*$" :: String) ]
 
-data ProjectConfig = ProjectConfig { valuesDir :: String }
+newtype ProjectConfig = ProjectConfig { valuesDir :: String }
 
 getProjectConfig :: IO ProjectConfig
 getProjectConfig =
