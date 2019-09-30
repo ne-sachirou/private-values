@@ -1,17 +1,17 @@
+cabal-version:       2.4
 name:                private-values
 version:             0.1.0
 synopsis:            Delete private values and private files from youre git repos
 description:         Please see README.md
 homepage:            http://github.com/ne-sachirou/private-values#readme
-license:             GPL-3
+license:             GPL-3.0-or-later
 license-file:        LICENSE
 author:              ne_Sachirou
 maintainer:          utakata.c4se@gmail.com
-copyright:           2015-2017 ne_Sachirou
+copyright:           2015-2019 ne_Sachirou
 category:            Cli
 build-type:          Simple
 -- extra-source-files:
-cabal-version:       >=1.24
 
 library
   hs-source-dirs:      src
