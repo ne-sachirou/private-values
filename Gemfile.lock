@@ -34,7 +34,7 @@ GEM
     gherkin (5.1.0)
     multi_json (1.13.1)
     multi_test (0.1.2)
-    rake (13.0.0)
+    rake (13.0.1)
     rspec-expectations (3.8.4)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
