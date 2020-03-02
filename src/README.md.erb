@@ -1,17 +1,21 @@
-private-values
-==
+![test](https://github.com/ne-sachirou/private-values/workflows/test/badge.svg)
+
+# private-values
+
 Delete private values and private files from youre git repos.
 
 ```
 <%= help %>
 ```
 
-Usage
---
+## Usage
+
 ### Install
+
 Donwload a binary from [releases](https://github.com/ne-sachirou/private-values/releases) and put it into the PATH directory.
 
 ### Global Setting
+
 Put the config file at `~/private-values.rc`:
 
 ```yaml
@@ -22,6 +26,7 @@ values-dir: ~/.private-values
 Make `~/.private-values` as your private Git repo.
 
 ### Store Private Values of Your Project
+
 Let `some-project` is your Git project.
 
 Create a new private-values project and then set private values.
@@ -55,6 +60,7 @@ And ignore the envrc.
 Your private values are stored at `~/.private-values/someProject/values.yml`.
 
 ### Store Private Files of Your Project
+
 For example I make `hello.sh`.
 
 ```sh
@@ -77,22 +83,23 @@ direnv allow
 hello.sh
 ```
 
-What is NOT private-values?
---
+## What is NOT private-values?
+
 - private-values dose NOT manage secrets in your organization. [valut](https://vaultproject.io) may help you.
 - private-values dose NOT encrypt your secrets. Use Bcrypt or other crypt methods.
 - private-values dose NOT store your secrets on a safe cloud server. I use private Git repo, or encrypted 7zip archive in a cloud storage for this purpose.
 - private-values is NOT a fast database backend.
 
-What IS private-values?
---
+## What IS private-values?
+
 - private-values aggregate your private values and files under 1 directory.
 - The values file `values.yml` is editable for human. It's just YAML format which maps a text key to a text value.
 
-TODO
---
+## TODO
+
 - [ ] Logo
 - [ ] Release Homebrew, Chocolatiey, apt
 
 [1]: http://direnv.net/
+
 <!-- vim:set ft=markdown: -->

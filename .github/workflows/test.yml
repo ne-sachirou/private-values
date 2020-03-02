@@ -1,0 +1,28 @@
+---
+name: test
+
+"on": push
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
+    name: test
+    steps:
+      - uses: mstksg/setup-stack@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: .stack-work
+          key: ${{ matrix.os }}_stack-work
+      - name: Test
+        run: |
+          stack setup
+          bundle install
+          bundle exec rake build test

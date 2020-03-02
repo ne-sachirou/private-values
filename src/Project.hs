@@ -6,6 +6,7 @@ import Control.Lens ( (^.), (^?), (&), (?~), at )
 import Control.Monad ( unless )
 import Data.Aeson.Lens ( key, _Object, _String )
 import Data.HashMap.Strict ( keys )
+import Data.List ( sort )
 import Data.Maybe ( fromMaybe )
 import qualified Data.Text as Text ( pack, unpack )
 import qualified Data.Text.Encoding as Text ( decodeUtf8 )
@@ -22,7 +23,7 @@ listProjectNames :: IO [String]
 listProjectNames =
   do ProjectConfig valuesDir <- getProjectConfig
      paths <- getDirectoryContents valuesDir
-     return [ path | path <- map takeBaseName paths, not $ path =~ ("^[\\.]*$" :: String) ]
+     return $ sort [ path | path <- map takeBaseName paths, not $ path =~ ("^[\\.]*$" :: String) ]
 
 newtype ProjectConfig = ProjectConfig { valuesDir :: String }
 

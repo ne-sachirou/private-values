@@ -3,11 +3,12 @@
 require 'fileutils'
 
 Before do
-  FileUtils.mkdir_p "#{__dir__}/../tmp"
+  FileUtils.mkdir_p File.expand_path("#{__dir__}/../tmp")
 end
 
 After do
-  FileUtils.rm_rf "#{__dir__}/../tmp", secure: true
+  # NOTE: `FileUtils.remove_entry_secure` cannot remove entries on WSL. So the tests should fail on WSL.
+  FileUtils.rm_rf File.expand_path("#{__dir__}/../tmp"), secure: true
 end
 
 Given(/^run NEW command with an option "([^"]*)"$/) do |project|

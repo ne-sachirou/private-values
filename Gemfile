@@ -7,4 +7,5 @@ group :development do
   gem 'cucumber'
   gem 'erubis'
   gem 'rake'
+  gem 'rubocop'
 end
