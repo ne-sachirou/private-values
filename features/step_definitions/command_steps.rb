@@ -2,13 +2,17 @@
 
 require 'fileutils'
 
+def on_wsl?
+  File.exist?('/proc/sys/kernel/osrelease') && IO.read('/proc/sys/kernel/osrelease').include?('Microsoft')
+end
+
 Before do
   FileUtils.mkdir_p File.expand_path("#{__dir__}/../tmp")
 end
 
 After do
   # NOTE: `FileUtils.remove_entry_secure` cannot remove entries on WSL. So the tests should fail on WSL.
-  FileUtils.rm_rf File.expand_path("#{__dir__}/../tmp"), secure: true
+  FileUtils.rm_rf File.expand_path("#{__dir__}/../tmp"), secure: !on_wsl?
 end
 
 Given(/^run NEW command with an option "([^"]*)"$/) do |project|

@@ -6,6 +6,12 @@ require 'erubis'
 require 'fileutils'
 require 'rubocop/rake_task'
 
+def stack(options)
+  stack_cmd = ['stack']
+  stack_cmd << '--system-ghc' if system('which ghc') && system('which cabal')
+  sh((stack_cmd + options).join(' '))
+end
+
 Cucumber::Rake::Task.new :features do |t|
   t.cucumber_opts = 'features --format pretty'
 end
@@ -19,9 +25,14 @@ task :build do
   )
   File.open("#{__dir__}/README.md", 'w:utf-8') { |f| f.write readme }
   puts 'README.md has built.'
-  sh 'stack build'
+  stack %w[build]
   FileUtils.mkdir 'bin' unless File.exist? 'bin'
   FileUtils.cp `stack exec which private-values`.chomp, 'bin/', preserve: true
+end
+
+desc 'Format'
+task format: [:"rubocop:auto_correct"] do
+  sh 'npx prettier --write --parser markdown src/README.md.erb'
 end
 
 desc 'Install bin'
@@ -31,8 +42,9 @@ end
 
 desc 'Rus tests'
 task test: %i[rubocop features] do
-  sh 'stack test'
-  sh 'stack exec hlint -- . -c'
+  stack %w[test]
+  stack %w[exec hlint -- . -c]
+  sh 'yamllint .github/workflows/*.yml' if system('which yamllint')
 end
 
 desc 'Update deps'
