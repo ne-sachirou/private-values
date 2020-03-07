@@ -47,7 +47,7 @@ jobs:
           key: stack-work-${{ matrix.os.vm }}-${{ github.sha }}
           restore-keys: |
             stack-work-${{ matrix.os.vm }}-
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Build
         run: |
           # echo "::set-env name=RELEASE_MESSAGE::$(git tag -n 1000 ${{ github.ref }})"
