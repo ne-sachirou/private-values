@@ -44,7 +44,7 @@ jobs:
           key: stack-work-${{ matrix.os.vm }}-${{ github.sha }}
           restore-keys: |
             stack-work-${{ matrix.os.vm }}-
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Test
         run: |
           bundle install
