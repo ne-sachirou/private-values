@@ -1,0 +1,109 @@
+---
+name: release
+
+'on':
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os.vm }}
+    strategy:
+      matrix:
+        os:
+          - vm: macos-latest
+            platform: darwin-x64
+          - vm: ubuntu-latest
+            platform: linux-x64
+    # NOTE: mstksg/setup-stack dosen't support Windows now.
+    #       - vm: windows-latest
+    #         platform: win64
+    steps:
+      # NOTE: actions/setup-haskell on actions/virtual-environments dosen't support MacOS now.
+      # - uses: actions/setup-haskell@v1
+      #   with:
+      #     ghc-version: '8.6.5'  # stack ghc -- --version
+      #     cabal-version: '2.4'  # stack exec env | ag cabal
+      - uses: mstksg/setup-stack@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - uses: actions/cache@v1
+        with:
+          path: ~/.bundle
+          key: bundle-${{ matrix.os.vm }}-${{ github.sha }}
+          restore-keys: |
+            bundle-${{ matrix.os.vm }}-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.stack
+          key: stack-${{ matrix.os.vm }}-${{ github.sha }}
+          restore-keys: |
+            stack-${{ matrix.os.vm }}-
+      - uses: actions/cache@v1
+        with:
+          path: .stack-work
+          key: stack-work-${{ matrix.os.vm }}-${{ github.sha }}
+          restore-keys: |
+            stack-work-${{ matrix.os.vm }}-
+      - uses: actions/checkout@v1
+      - name: Build
+        run: |
+          # echo "::set-env name=RELEASE_MESSAGE::$(git tag -n 1000 ${{ github.ref }})"
+          bundle install
+          bundle exec rake build
+          bundle clean --force
+      - uses: actions/upload-artifact@v1
+        with:
+          path: bin/private-values
+          name: private-values-${{ matrix.os.platform }}
+  create-release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: true
+      - run: |
+          echo "${{ steps.create_release.outputs.upload_url }}" > upload_url.txt
+      - uses: actions/upload-artifact@v1
+        with:
+          path: upload_url.txt
+          name: upload_url.txt
+  upload-release-assets:
+    needs: [create-release]
+    runs-on: ${{ matrix.os.vm }}
+    strategy:
+      matrix:
+        os:
+          - vm: macos-latest
+            platform: darwin-x64
+          - vm: ubuntu-latest
+            platform: linux-x64
+    steps:
+      - uses: actions/download-artifact@v1
+        with:
+          path: bin
+          name: private-values-${{ matrix.os.platform }}
+      - uses: actions/download-artifact@v1
+        with:
+          path: .
+          name: upload_url.txt
+      - id: create_release
+        run: |
+          echo "::set-output name=upload_url::$(cat upload_url.txt)"
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: bin/private-values
+          asset_name: private-values-${{ matrix.os.platform }}
+          asset_content_type: application/octet-stream

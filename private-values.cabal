@@ -16,7 +16,7 @@ build-type:          Simple
 library
   hs-source-dirs:      src
   exposed-modules:     FileUtil, Lib, Project, YamlUtil
-  build-depends:       base >= 4.9 && < 5
+  build-depends:       base >= 4.0 && < 5
                      , aeson
                      , bytestring
                      , directory

@@ -8,7 +8,8 @@ GEM
       ffi (~> 1.9)
       rspec-expectations (~> 3.4)
       thor (~> 1.0)
-    backports (3.16.1)
+    ast (2.4.0)
+    backports (3.17.0)
     builder (3.2.4)
     childprocess (3.0.0)
     contracts (0.16.0)
@@ -32,14 +33,30 @@ GEM
     erubis (2.7.0)
     ffi (1.12.2)
     gherkin (5.1.0)
+    jaro_winkler (1.5.4)
     multi_json (1.14.1)
     multi_test (0.1.2)
+    parallel (1.19.1)
+    parser (2.7.0.4)
+      ast (~> 2.4.0)
+    rainbow (3.0.0)
     rake (13.0.1)
+    rexml (3.2.4)
     rspec-expectations (3.9.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
+    rubocop (0.80.1)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.7.0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      rexml
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 1.7)
+    ruby-progressbar (1.10.1)
     thor (1.0.1)
+    unicode-display_width (1.6.1)
 
 PLATFORMS
   ruby
@@ -49,6 +66,7 @@ DEPENDENCIES
   cucumber
   erubis
   rake
+  rubocop
 
 BUNDLED WITH
-   1.17.3
+   2.1.2

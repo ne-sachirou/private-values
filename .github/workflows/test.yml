@@ -1,0 +1,52 @@
+---
+name: test
+
+'on': push
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os.vm }}
+    strategy:
+      matrix:
+        os:
+          - vm: macos-latest
+            platform: darwin-x64
+          - vm: ubuntu-latest
+            platform: linux-x64
+    # NOTE: mstksg/setup-stack dosen't support Windows now.
+    #       - vm: windows-latest
+    #         platform: win64
+    steps:
+      # NOTE: actions/setup-haskell on actions/virtual-environments dosen't support MacOS now.
+      # - uses: actions/setup-haskell@v1
+      #   with:
+      #     ghc-version: '8.6.5'  # stack ghc -- --version
+      #     cabal-version: '2.4'  # stack exec env | ag cabal
+      - uses: mstksg/setup-stack@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - uses: actions/cache@v1
+        with:
+          path: ~/.bundle
+          key: bundle-${{ matrix.os.vm }}-${{ github.sha }}
+          restore-keys: |
+            bundle-${{ matrix.os.vm }}-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.stack
+          key: stack-${{ matrix.os.vm }}-${{ github.sha }}
+          restore-keys: |
+            stack-${{ matrix.os.vm }}-
+      - uses: actions/cache@v1
+        with:
+          path: .stack-work
+          key: stack-work-${{ matrix.os.vm }}-${{ github.sha }}
+          restore-keys: |
+            stack-work-${{ matrix.os.vm }}-
+      - uses: actions/checkout@v1
+      - name: Test
+        run: |
+          bundle install
+          bundle exec rake build test
+          bundle clean --force
