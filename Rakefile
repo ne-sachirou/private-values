@@ -33,6 +33,7 @@ end
 desc 'Format'
 task format: [:"rubocop:auto_correct"] do
   sh 'npx prettier --write --parser markdown src/README.md.erb'
+  sh 'npx prettier --write --parser yaml .yamllint $(ag -g "\.y(a?)ml$" --hidden)'
 end
 
 desc 'Install bin'
